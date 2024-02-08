@@ -3,19 +3,19 @@ package com.world.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
+@Table(name="login")
 public class Login {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name="id")
+    private long id;
+    @Column(name="username")
     private String username;
+    @Column(name="password")
     private String password;
 
 }

@@ -21,14 +21,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/world")
 public class CityController {
 
-
     @Autowired
     CityService cityService;
-
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
 
     @PostMapping("/city")
     public ResponseVO getAllCity(@RequestBody BaseRequest request){

@@ -1,13 +1,18 @@
 package com.world.controller;
 
 
+import com.world.enums.ErrorType;
+import com.world.exception.BaseException;
+import com.world.request.JwtRequest;
 import com.world.security.JwtTokenUtil;
 import com.world.entity.Login;
-import com.world.request.JwtRequest;
 import com.world.model.JwtResponse;
 import com.world.repository.LoginRepository;
+import com.world.services.impl.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -17,7 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -34,9 +41,13 @@ public class JwtAuthenticationController {
 
 
 	@Autowired
+	JwtUserDetailsService jwtUserDetailsService;
+
+
+	@Autowired
 	private LoginRepository loginRepository;
 
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
 			throws Exception {
 
@@ -54,18 +65,19 @@ public class JwtAuthenticationController {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
 
-		Login user = loginRepository.findByUserName(username)
-				.orElseThrow(() ->
-						new UsernameNotFoundException("User not found with username:" + username));
-
-		System.out.println(user);
-
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
 		} catch (DisabledException e) {
 			throw new Exception("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}
+
+	@PostMapping("/register")
+	public HttpStatus userRegister(@Valid @RequestBody JwtRequest loginRequest) {
+			jwtUserDetailsService.register(loginRequest);
+			return HttpStatus.CREATED;
+	}
+
 }
