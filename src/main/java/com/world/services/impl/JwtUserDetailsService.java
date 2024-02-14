@@ -5,7 +5,7 @@ import com.world.enums.ErrorType;
 import com.world.exception.BaseException;
 import com.world.repository.LoginRepository;
 import com.world.request.JwtRequest;
-import com.world.utils.SnowflakeIdGenerator;
+import com.world.utils.SnowflakeIdWorkerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -51,8 +51,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 			}
 
 			Login newUser = new Login();
-			long id =loginRepository.countRecord();
-			SnowflakeIdGenerator idGenerator = new SnowflakeIdGenerator(id);
+			SnowflakeIdWorkerUtils idGenerator = new SnowflakeIdWorkerUtils(0,0);
 			newUser.setId(idGenerator.nextId());
 			newUser.setUsername(loginRequest.getUsername());
 			newUser.setPassword(passwordEncoder.encode(loginRequest.getPassword()));

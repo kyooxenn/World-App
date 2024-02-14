@@ -15,7 +15,5 @@ public interface LoginRepository extends JpaRepository<Login, Integer> {
     @Query(value = "select * FROM login where username = :username", nativeQuery = true)
     Optional<Login> findByUserName (@Param("username") String username);
 
-    @Query(value = "select count(*) FROM login", nativeQuery = true)
-    int countRecord();
 
 }
