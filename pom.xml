@@ -68,6 +68,7 @@
 	</dependencies>
 
 
+
 	<build>
 		<plugins>
 			<plugin>
@@ -76,13 +77,14 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>java.com.world.WorldAppApplication</mainClass>
+							<mainClass>com.world.WorldAppApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
 
 
 
